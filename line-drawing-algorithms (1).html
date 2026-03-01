@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">        
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Line Drawing Algorithm</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: device-width;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+        
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            border-left: 5px solid #667eea;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .definition {
+            background: #f0f4ff;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .algorithm-section {
+            background: #f9f9f9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        canvas {
+            border: 2px solid #667eea;
+            background: white;
+            display: block;
+            margin: 20px auto;
+            border-radius: 5px;
+        }
+        
+        .flowchart {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .flowchart-box {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            background: #f0f4ff;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .flowchart-diamond {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            border: 2px solid #764ba2;
+            border-radius: 50%;
+            background: #fff0f5;
+            font-weight: bold;
+            color: #333;
+            transform: rotate(45deg);
+        }
+        
+        .flowchart-arrow {
+            font-size: 1.5em;
+            color: #667eea;
+            margin: 10px;
+        }
+        
+        .example {
+            background: #fffbf0;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #ff9800;
+            border-radius: 5px;
+        }
+        
+        .code {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Line Drawing Algorithm</h1>
+        
+        <!-- Computer Graphics Definition -->
+        <h2>Computer Graphics</h2>
+        <div class="definition">
+            <p><strong>Computer Graphics</strong> is a field of computer science and digital art that deals with creating, manipulating, and displaying visual images and animations using computers. It involves the use of algorithms and mathematical techniques to render 2D and 3D graphics, handle visual effects, and transform data into visual representations that humans can understand and interact with.</p>
+            <p>Computer graphics is essential in various applications including:</p>
+            <ul>
+                <li>Video Games and Entertainment</li>
+                <li>Animation and Visual Effects</li>
+                <li>Architectural Visualization</li>
+                <li>Medical Imaging</li>
+                <li>Scientific Visualization</li>
+                <li>User Interface Design</li>
+            </ul>
+        </div>
+        
+        <!-- Line Drawing Algorithms Overview -->
+        <h2>Line Drawing Algorithms</h2>
+        <div class="definition">
+            <p>Line drawing is a fundamental operation in computer graphics. A line drawing algorithm determines which pixels should be illuminated to best represent a line between two points on a discrete pixel grid (raster display). Since a continuous line cannot be perfectly represented on a pixel grid, line drawing algorithms use various techniques to approximate the line with the best possible visual result. In General two line drawing algorithms are used:-</p>
+            <ul>
+                <li><strong>Digital Differential Analyzer.</strong></li>
+                <li><strong>Bresenham's Algorithm.</strong></li>
+            </ul>
+            <h3>Key Objectives:</h3>
+            <ul>
+                <li><strong>Accuracy:</strong> The line should be as close as possible to the mathematical line.</li>
+                <li><strong>Efficiency:</strong> The algorithm should be fast and use minimal computational resources.</li>
+                <li><strong>Smooth Appearance:</strong> The rendered line should appear smooth and continuous to the human eye.</li>
+                <li><strong>Consistency:</strong> Lines should be drawn consistently regardless of direction.</li>
+            </ul>
+        </div>
+        
+        <!-- DDA Algorithm -->
+        <h2>DDA (Digital Differential Analyzer) Algorithm</h2>
+        <div class="algorithm-section">
+            <p>The <strong>DDA (Digital Differential Analyzer)</strong> algorithm is one of the simplest line drawing algorithms. It is based on the concept of calculating pixel positions using the differential equation of the line.</p>
+            
+            <h3>Principle:</h3>
+            <p>The DDA algorithm uses the slope of the line to determine which pixels to illuminate. It moves from one pixel to the next along the line by incrementing either the x or y coordinate by 1, and calculating the corresponding coordinate on the other axis.</p>
+            
+            <h3>Algorithm Steps:</h3>
+            <ol>
+                <li>Read the two endpoints of the line: (x₀, y₀) and (x₁, y₁)</li>
+                <li>Calculate: dx = x₁ - x₀ and dy = y₁ - y₀</li>
+                <li>Determine the number of steps: steps = max(|dx|, |dy|)</li>
+                <li>Calculate increments:
+                    <ul>
+                        <li>x_increment = dx / steps</li>
+                        <li>y_increment = dy / steps</li>
+                    </ul>
+                </li>
+                <li>Initialize x = x₀ and y = y₀</li>
+                <li>For i = 0 to steps:
+                    <ul>
+                        <li>Plot pixel at (round(x), round(y))</li>
+                        <li>x = x + x_increment</li>
+                        <li>y = y + y_increment</li>
+                    </ul>
+                </li>
+                <li>Repeat the step 6 until x = x1</li>
+                <li>When x = x1, end algorithm.</li>
+            </ol>
+            
+            <h3>Advantages:</h3>
+            <ul>
+                <li>Simple to understand and implement</li>
+                <li>Works well for all slopes</li>
+                <li>No floating-point calculations required for plotting</li>
+            </ul>
+            
+            <h3>Disadvantages:</h3>
+            <ul>
+                <li>Requires floating-point arithmetic</li>
+                <li>Rounding errors can accumulate</li>
+                <li>Slightly slower than Bresenham's algorithm</li>
+            </ul>
+            
+            <!-- DDA Flowchart 
+            <h3>DDA Algorithm Flowchart:</h3>
+            <div class="flowchart">
+                <div class="flowchart-box">START</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">Read (x₀, y₀) and (x₁, y₁)</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">Calculate dx = x₁ - x₀, dy = y₁ - y₀</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">steps = max(|dx|, |dy|)</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">x_inc = dx/steps, y_inc = dy/steps</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">x = x₀, y = y₀, i = 0</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">i ≤ steps?</div>
+                <div class="flowchart-arrow">Yes ↓</div>
+                <div class="flowchart-box">Plot(round(x), round(y))</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">x = x + x_inc, y = y + y_inc, i++</div>
+                <div class="flowchart-arrow">↓ (back to check)</div>
+                <div class="flowchart-box">No ↓ END</div>
+            </div>-->
+            
+            <!-- DDA Code Example -->
+            <h3>DDA Algorithm Code (Pseudocode):</h3>
+            <div class="code">
+                <br>void DDA(int x0, int y0, int x1, int y1) </br>{ 
+    <br>float dx = x1 - x0;</br>
+    float dy = y1 - y0;
+    <br>int steps = (int)max(abs(dx), abs(dy));</br>
+    
+    float x_inc = (dx / steps);
+                    <br>float y_inc = (dy / steps);</br>
+    
+    <br>float x = x0;</br>
+    float y = y0;
+    
+    <br>for (int i = 0; i <= steps; i++) </br>{
+        <br>plot_pixel(round(x), round(y));</br>
+        x += x_inc;
+        y += y_inc;
+    }
+        <br>}</br>
+            </div>
+            
+            <!-- DDA Example -->
+            <h3>DDA Example:</h3>
+            <div class="example">
+                <p><strong>Draw a line from (0, 0) to (8, 4)</strong></p>
+                <p><strong>Calculations:</strong></p>
+                <ul>
+                    <li>dx = 8 - 0 = 8</li>
+                    <li>dy = 4 - 0 = 4</li>
+                    <li>steps = max(8, 4) = 8</li>
+                    <li>x_inc = 8/8 = 1</li>
+                    <li>y_inc = 4/8 = 0.5</li>
+                </ul>
+                <table>
+                    <tr>
+                        <th>Step</th>
+                        <th>x</th>
+                        <th>y</th>
+                        <th>Pixel (round(x), round(y))</th>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>(0, 0)</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>0.5</td>
+                        <td>(1, 1)</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>(2, 1)</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>3</td>
+                        <td>1.5</td>
+                        <td>(3, 2)</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>(4, 2)</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>5</td>
+                        <td>2.5</td>
+                        <td>(5, 2)</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>6</td>
+                        <td>3</td>
+                        <td>(6, 3)</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>7</td>
+                        <td>3.5</td>
+                        <td>(7, 4)</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>4</td>
+                        <td>(8, 4)</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- DDA Canvas Visualization -->
+            <h3>DDA Line Visualization:</h3>
+            <canvas id="ddaCanvas" width="250" height="200"></canvas>
+        </div>
+        
+        <!-- Bresenham Algorithm -->
+        <h2>Bresenham's Line Drawing Algorithm</h2>
+        <div class="algorithm-section">
+            <p><strong>Bresenham's Algorithm</strong> is an efficient line drawing algorithm that uses only integer arithmetic. It was developed by Jack Bresenham and is widely used in computer graphics because of its speed and accuracy.</p>
+            
+            <h3>Principle:</h3>
+            <p>Bresenham's algorithm determines which pixels should be selected to form a close approximation to a straight line between two endpoints. It uses the concept of error term to decide whether the next pixel should be plotted above or below the ideal line.</p>
+            
+            <h3>Algorithm Steps (for slope between 0 and 1):</h3>
+            <ol>
+                <li>Read the two endpoints of the line: (x₀, y₀) and (x₁, y₁)</li>
+                <li>Calculate: dx = x₁ - x₀ and dy = y₁ - y₀</li>
+                <li>Calculate initial decision parameter: p = 2*dy - dx</li>
+                <li>Initialize: x = x₀, y = y₀</li>
+                <li>Plot pixel at (x, y)</li>
+                <li>For i = 0 to dx:
+                    <ul>
+                        <li>If p < 0:
+                            <ul>
+                                <li>x = x + 1</li>
+                                <li>p = p + 2*dy</li>
+                            </ul>
+                        </li>
+                        <li>Else:
+                            <ul>
+                                <li>x = x + 1</li>
+                                <li>y = y + 1</li>
+                                <li>p = p + 2*dy - 2*dx</li>
+                            </ul>
+                        </li>
+                        <li>Plot pixel at (x, y)</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3>Advantages:</h3>
+            <ul>
+                <li>Uses only integer arithmetic (very fast)</li>
+                <li>More efficient than DDA algorithm</li>
+                <li>No rounding errors</li>
+                <li>Produces accurate and smooth lines</li>
+                <li>Widely used in hardware implementations</li>
+            </ul>
+            
+            <h3>Disadvantages:</h3>
+            <ul>
+                <li>Slightly more complex than DDA</li>
+                <li>Requires handling of different slope cases</li>
+            </ul>
+            
+            <!-- Bresenham Flowchart 
+            <h3>Bresenham's Algorithm Flowchart:</h3>
+            <div class="flowchart">
+                <div class="flowchart-box">START</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">Read (x₀, y₀) and (x₁, y₁)</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">dx = x₁ - x₀, dy = y₁ - y₀</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">p = 2*dy - dx</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">x = x₀, y = y₀</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">Plot(x, y)</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">i = 0 to dx?</div>
+                <div class="flowchart-arrow">Yes ↓</div>
+                <div class="flowchart-box">p < 0?</div>
+                <div class="flowchart-arrow">Yes ↓</div>
+                <div class="flowchart-box">x = x + 1, p = p + 2*dy</div>
+                <div class="flowchart-arrow">↓</div>
+                <div class="flowchart-box">No ↓</div>
+                <div class="flowchart-box">x = x + 1, y = y + 1, p = p + 2*dy - 2*dx</div>
+                <div class="flowchart-arrow">↓ (back)</div>
+                <div class="flowchart-box">No ↓ END</div>
+            </div>
+            
+             Bresenham Code Example -->
+            <h3>Bresenham's Algorithm Code (Pseudocode):</h3>
+            <div class="code">
+                <br>void Bresenham(int x0, int y0, int x1, int y1) </br>{
+                    <br>  int dx = abs(x1 - x0);</br>
+    int dy = abs(y1 - y0);
+                    <br> int x = x0, y = y0;</br>
+    int x_inc = (x0 < x1) ? 1 : -1;
+        <br> int y_inc = (y0 < y1) ? 1 : -1;</br>
+    
+            <br> if (dx > dy)</br> {
+                <br>  int p = 2*dy - dx;</br>
+                <br>    for (int i = 0; i < dx; i++)</br> {
+            plot_pixel(x, y);
+                    <br>x += x_inc;</br>
+                    <br> if (p < 0)</br> {
+                p += 2*dy;
+            } <br>else </br>{
+                y += y_inc;
+                p += 2*dy - 2*dx;
+            }
+                        <br>}</br>
+    } else {
+        int p = 2*dx - dy;
+        <br>for (int i = 0; i < dy; i++)</br> {
+            <br>plot_pixel(x, y);</br>
+            y += y_inc;
+            <br> if (p < 0) </br>{
+                p += 2*dx;
+            } <br>else </br>{
+                x += x_inc;
+                p += 2*dx - 2*dy;
+            }
+        }
+    }
+}
+            </div>
+            
+            <!-- Bresenham Example -->
+            <h3>Bresenham Example:</h3>
+            <div class="example">
+                <p><strong>Draw a line from (0, 0) to (8, 4)</strong></p>
+                <p><strong>Calculations:</strong></p>
+                <ul>
+                    <li>dx = 8 - 0 = 8</li>
+                    <li>dy = 4 - 0 = 4</li>
+                    <li>p₀ = 2*dy - dx = 2*4 - 8 = 0</li>
+                </ul>
+                <table>
+                    <tr>
+                        <th>Step</th>
+                        <th>x</th>
+                        <th>y</th>
+                        <th>p</th>
+                        <th>Pixel (x, y)</th>
+                        <th>Decision</th>
+                    </tr>
+                    <tr>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>(0, 0)</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>1</td>
+                        <td>-8</td>
+                        <td>(1, 1)</td>
+                        <td>p ≥ 0</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>(2, 1)</td>
+                        <td>p < 0</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>3</td>
+                        <td>2</td>
+                        <td>-8</td>
+                        <td>(3, 2)</td>
+                        <td>p ≥ 0</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>4</td>
+                        <td>2</td>
+                        <td>0</td>
+                        <td>(4, 2)</td>
+                        <td>p < 0</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>5</td>
+                        <td>3</td>
+                        <td>-8</td>
+                        <td>(5, 3)</td>
+                        <td>p ≥ 0</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>6</td>
+                        <td>3</td>
+                        <td>0</td>
+                        <td>(6, 3)</td>
+                        <td>p < 0</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>7</td>
+                        <td>4</td>
+                        <td>-8</td>
+                        <td>(7, 4)</td>
+                        <td>p ≥ 0</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>8</td>
+                        <td>4</td>
+                        <td>0</td>
+                        <td>(8, 4)</td>
+                        <td>-</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Bresenham Canvas Visualization -->
+            <h3>Bresenham's Line Visualization:</h3>
+            <canvas id="bresenhamCanvas" width="260" height="200"></canvas>
+        </div>
+        
+        <!-- Comparison Section -->
+        <h2>Comparison of DDA vs Bresenham's Algorithm</h2>
+        <div class="algorithm-section">
+            <table>
+                <tr>
+                    <th>Aspect</th>
+                    <th>DDA Algorithm</th>
+                    <th>Bresenham's Algorithm</th>
+                </tr>
+                <tr>
+                    <td><strong>Arithmetic</strong></td>
+                    <td>Floating-point</td>
+                    <td>Integer only</td>
+                </tr>
+                <tr>
+                    <td><strong>Speed</strong></td>
+                    <td>Slower</td>
+                    <td>Faster</td>
+                </tr>
+                <tr>
+                    <td><strong>Accuracy</strong></td>
+                    <td>Good</td>
+                    <td>Excellent</td>
+                </tr>
+                <tr>
+                    <td><strong>Complexity</strong></td>
+                    <td>Simple</td>
+                    <td>Moderate</td>
+                </tr>
+                <tr>
+                    <td><strong>Rounding Errors</strong></td>
+                    <td>Yes</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td><strong>Hardware Implementation</strong></td>
+                    <td>Difficult</td>
+                    <td>Easy</td>
+                </tr>
+                <tr>
+                    <td><strong>Works for all slopes</strong></td>
+                    <td>Yes</td>
+                    <td>Yes (with modifications)</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // DDA Algorithm Implementation
+        function ddaAlgorithm(x0, y0, x1, y1) {
+            let dx = x1 - x0;
+            let dy = y1 - y0;
+            let steps = Math.max(Math.abs(dx), Math.abs(dy));
+            
+            let x_inc = dx / steps;
+            let y_inc = dy / steps;
+            
+            let points = [];
+            let x = x0;
+            let y = y0;
+            
+            for (let i = 0; i <= steps; i++) {
+                points.push({x: Math.round(x), y: Math.round(y)});
+                x += x_inc;
+                y += y_inc;
+            }
+            
+            return points;
+        }
+        
+        // Bresenham Algorithm Implementation
+        function bresenhamAlgorithm(x0, y0, x1, y1) {
+            let points = [];
+            let dx = Math.abs(x1 - x0);
+            let dy = Math.abs(y1 - y0);
+            let sx = (x0 < x1) ? 1 : -1;
+            let sy = (y0 < y1) ? 1 : -1;
+            let err = dx - dy;
+            
+            let x = x0;
+            let y = y0;
+            
+            while (true) {
+                points.push({x: x, y: y});
+                
+                if (x === x1 && y === y1) break;
+                
+                let e2 = 2 * err;
+                if (e2 > -dy) {
+                    err -= dy;
+                    x += sx;
+                }
+                if (e2 < dx) {
+                    err += dx;
+                    y += sy;
+                }
+            }
+            
+            return points;
+        }
+        
+        // Draw grid
+        function drawGrid(canvas, ctx) {
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 0.5;
+            
+            for (let i = 0; i <= canvas.width; i += 20) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, canvas.height);
+                ctx.stroke();
+            }
+            
+            for (let i = 0; i <= canvas.height; i += 20) {
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(canvas.width, i);
+                ctx.stroke();
+            }
+        }
+        
+        // Draw pixels
+        function drawPixels(ctx, points, color = '#667eea') {
+            ctx.fillStyle = color;
+            points.forEach(point => {
+                ctx.fillRect(point.x * 20 + 5, point.y * 20 + 5, 10, 10);
+            });
+        }
+        
+        // Draw ideal line
+        function drawIdealLine(ctx, x0, y0, x1, y1) {
+            ctx.strokeStyle = '#ff9800';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(x0 * 20 + 10, y0 * 20 + 10);
+            ctx.lineTo(x1 * 20 + 10, y1 * 20 + 10);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+        
+        // Initialize DDA Canvas
+        let ddaCanvas = document.getElementById('ddaCanvas');
+        let ddaCtx = ddaCanvas.getContext('2d');
+        ddaCtx.fillStyle = 'white';
+        ddaCtx.fillRect(0, 0, ddaCanvas.width, ddaCanvas.height);
+        
+        drawGrid(ddaCanvas, ddaCtx);
+        let ddaPoints = ddaAlgorithm(1, 1, 9, 5);
+        drawIdealLine(ddaCtx, 1, 1, 9, 5);
+        drawPixels(ddaCtx, ddaPoints, '#667eea');
+        
+        // Add labels
+        ddaCtx.fillStyle = '#333';
+        ddaCtx.font = '12px Arial';
+        ddaCtx.fillText('Start (0,0)', 15, 20);
+        ddaCtx.fillText('End (8,4)', 200, 120);
+        ddaCtx.fillText('Ideal Line (dashed)', 125, 20);
+        ddaCtx.fillText('DDA Pixels (solid)', 125, 35);
+        
+        // Initialize Bresenham Canvas
+        let bresenhamCanvas = document.getElementById('bresenhamCanvas');
+        let bresenhamCtx = bresenhamCanvas.getContext('2d');
+        bresenhamCtx.fillStyle = 'white';
+        bresenhamCtx.fillRect(0, 0, bresenhamCanvas.width, bresenhamCanvas.height);
+        
+        drawGrid(bresenhamCanvas, bresenhamCtx);
+        let bresenhamPoints = bresenhamAlgorithm(1, 1, 9, 5);
+        drawIdealLine(bresenhamCtx, 1, 1, 9, 5);
+        drawPixels(bresenhamCtx, bresenhamPoints, '#764ba2');
+        
+        // Add labels
+        bresenhamCtx.fillStyle = '#333';
+        bresenhamCtx.font = '12px Arial';
+        bresenhamCtx.fillText('Start (0,0)', 15, 20);
+        bresenhamCtx.fillText('End (8,4)', 200, 120);
+        bresenhamCtx.fillText('Ideal Line (dashed)', 125, 20);
+        bresenhamCtx.fillText('Bresenham Pixels (solid)', 125, 35);
+    </script>
+</body>
+</html>
